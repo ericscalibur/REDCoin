@@ -1,0 +1,17 @@
+{
+    "root": {
+        "publickey": "4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2",
+        "privatekey": "d42e127cc02cfb7c64b1f2893ba6a16b7bc30503bee2fc21e9aef41f7e7b5419",
+        "REDCoin": 35.5
+    },
+    "cryptoCat": {
+        "publickey": "e6f7d02ee6eeebe7f9193dda0845fdf1370bcaa38c573370564667ee3ee86b3a",
+        "privatekey": "162214a580f340389a77b08aed014f646b99b8a1ccd1565f2e70694f58c12642",
+        "REDCoin": 42.5
+    },
+    "bongaDinga": {
+        "publickey": "7c80489e1abb7d1a6acf2d12766e21028c5419438d22ba8625a0051f122cb7b5",
+        "privatekey": "c02b6fa6628b35f18297eb1d58b42be50f2cba0108d75c3587d236323a125656",
+        "REDCoin": 22.0
+    }
+}

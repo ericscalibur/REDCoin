@@ -1,0 +1,15 @@
+{
+    "N0NCE": {
+        "transactions": {
+            "IDZERO": {
+                "sender": "seed",
+                "receiver": "root",
+                "amount": "50.00",
+                "timestamp": "GENISIS"
+            }
+        },
+        "previousNonce": "none",
+        "nonce": "N0NCE",
+        "count": 1
+    }
+}

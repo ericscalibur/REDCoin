@@ -104,7 +104,7 @@ def ViewPrivateKey():
 	if alias in usersmaster.keys():
 
 		vk = usersmaster[alias]['privatekey']
-		print("PublicKey: "+vk)
+		print("PrivateKey: "+vk)
 
 	else:
 		print("Alias not found")
@@ -266,7 +266,7 @@ def ReviewUserTransactionHistory():
 				a = redchain[nonce]['transactions'][txID]['amount']
 				t = redchain[nonce]['transactions'][txID]['timestamp']
 
-				print("Time: "+t+", Sender: "+s+", Receiver: "+r+", REDCoin: "+a)
+				print("Time: "+t+", Sender: "+s+", Receiver: "+r+", REDCoin: "+a+", txID: "+txID)
 
 				resultCount += 1
 

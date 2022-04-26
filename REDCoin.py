@@ -1,5 +1,6 @@
 import hashlib
 import json
+import os
 from datetime import datetime
 from os import path
 
@@ -10,6 +11,9 @@ txpb = 5    # transcations per block
 
 commandsList = ["CreateNewUser", "ViewBalance","ViewPublicKey","ViewPrivateKey","NumberOfUsers","ViewAllAccounts","NewTransaction", "ReviewTransaction", "ReviewUserTransactionHistory", "Quit"]
 play = True
+
+def cls():
+    os.system('cls' if os.name=='nt' else 'clear')
 
 class REDBlock:
 
@@ -274,6 +278,9 @@ def ReviewUserTransactionHistory():
 
 		print("Alias not found")
 
+# now, to clear the screen
+cls()
+
 print("Welcome to REDCoin! Choose from the following")
 while(play):
 	print("\nAvailable Commands:")
@@ -285,41 +292,51 @@ while(play):
 
 	if selection == 'CreateNewUser' or selection == '1':
 
+		cls()
 		CreateNewUser()
 
 	elif selection == 'ViewBalance' or selection == '2':
 
+		cls()
 		ViewBalance()
 
 	elif selection == 'ViewPublicKey' or selection == '3':
 
+		cls()
 		ViewPublicKey()
 
 	elif selection =='ViewPrivateKey' or selection == '4':
 
+		cls()
 		ViewPrivateKey()
 
 	elif selection == "NumberOfUsers" or selection == '5':
 
+		cls()
 		NumberOfUsers()
 
 	elif selection == "ViewAllAccounts" or selection == '6':
 
+		cls()
 		ViewAllAccounts()
 
 	elif selection == "NewTransaction" or selection == '7':
 
+		cls()
 		NewTransaction()
 
 	elif selection == "ReviewTransaction" or selection == '8':
 
+		cls()
 		ReviewTransaction()
 
 	elif selection == 'ReviewUserTransactionHistory' or selection == '9':
 
+		cls()
 		ReviewUserTransactionHistory()
 
 	elif selection ==  "Quit" or selection == '10':
 
 		play = False
+		cls()
 		print("Goodbye")

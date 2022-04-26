@@ -1,3 +1,6 @@
 # REDCoin
 REDCoin blockchain
-Don't read this
+
+OPEN TERMINAL AND RUN THE FOLLOWING COMMAND:
+
+python3 REDCoin.py

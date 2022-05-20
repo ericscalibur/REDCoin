@@ -80,9 +80,10 @@ def ViewBalance():
 
 		balance = usersmaster[alias]['REDCoin']
 		print("RedCoin: "+str(balance))
+
 	else:
 		print("Alias not found")
-	return
+
 
 def ViewPublicKey():
 
@@ -99,7 +100,7 @@ def ViewPublicKey():
 
 	else:
 		print("Alias not found")
-	return
+
 
 def ViewPrivateKey():
 
@@ -116,7 +117,7 @@ def ViewPrivateKey():
 
 	else:
 		print("Alias not found")
-	return
+
 
 def NumberOfUsers():
 
@@ -125,7 +126,7 @@ def NumberOfUsers():
 	f.close()
 
 	print("Number of Users: "+str(len(data)))
-	return
+
 
 def ViewAllAccounts():
 
@@ -140,7 +141,7 @@ def ViewAllAccounts():
 		for s in range(spaces):
 			space = space +" "
 		print(key+space+str(value['REDCoin']))
-	return
+
 
 def NewTransaction():
 
@@ -167,7 +168,7 @@ def NewTransaction():
 					receiverPublicKey = usersmaster[receiver]['publickey']
 					newTX = Transaction(sender, senderPublicKey, receiver, receiverPublicKey, amt)
 					newTX.timestamp = str(datetime.now())
-					hashable = str(newTX.timestamp) + sender + receiver + amt
+					hashable = str(newTX.timestamp) + sender+ senderPublicKey + pk + receiver + receiverPublicKey + amt
 					newTX.ID = hashlib.sha256(hashable.encode()).hexdigest()
 					time.sleep(5)
 					print("Submiting transaction to REDChain..")
@@ -177,10 +178,13 @@ def NewTransaction():
 
 					elif recentCount == 5:
 
+						hashthis = ""
+
+						for tx in recentBlock['transactions']:
+							hashthis += tx
+
 						newBlock = REDBlock(recentNonce)
-						#hashthis = recentBlock + recentNonce
-						#print("HashThis: "+hashthis)
-						newBlock.nonce = hashlib.sha256(recentNonce.encode()).hexdigest()
+						newBlock.nonce = hashlib.sha256(hashthis.encode()).hexdigest()
 						AddBlockToChain(newBlock)
 						AddTransactionToCurrentBlock(newBlock.nonce, newTX)
 
@@ -195,7 +199,7 @@ def NewTransaction():
 			print("Incorrect Private Key..")
 	else:
 		print("Alias not found..")
-	return
+
 
 def AddTransactionToCurrentBlock(nonce, tx):
 

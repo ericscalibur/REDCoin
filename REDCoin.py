@@ -190,6 +190,7 @@ def NewTransaction():
 
 					time.sleep(3)
 					print("Transaction Confirmed!")
+                    print("TxID: "+newTX.ID)
 
 				else:
 					print("Insufficient REDCoin..")

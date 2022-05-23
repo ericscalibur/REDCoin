@@ -2,11 +2,11 @@
     "root": {
         "publickey": "4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2",
         "privatekey": "d42e127cc02cfb7c64b1f2893ba6a16b7bc30503bee2fc21e9aef41f7e7b5419",
-        "REDCoin": 50.0
+        "REDCoin": 49.98
     },
     "neo": {
         "publickey": "b1cb5b3d929db848c3c5ea567e7808d1e6bc46590f5aedbcfab502ccc7729fb9",
         "privatekey": "89eefb224b75e2aee2b16702bbbaafe58a15a45ae56edcb17147d15793562c13",
-        "REDCoin": 50.0
+        "REDCoin": 50.02
     }
 }

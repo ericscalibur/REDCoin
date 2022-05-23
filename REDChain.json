@@ -7,89 +7,17 @@
                 "amount": "50.00",
                 "timestamp": "GENISIS"
             },
-            "5e1a6c6ef946a98b0afd9660a4b9971f1ef8d9dde7cbb0d6e63833e49ea610c1": {
+            "03d79aa73c4a590075117ac263d5e2464088f01eb209f33c03e0ab444efbb4b8": {
                 "sender": "root",
-                "receiver": "cryptoCat",
-                "amount": "2",
-                "timestamp": "2021-08-08 23:34:36.632695"
-            },
-            "1ad8f9eabf82d6d61328d38cd8ae74322ef2fb42b30bc87aa265297bacdac398": {
-                "sender": "root",
-                "receiver": "cryptoCat",
-                "amount": "2",
-                "timestamp": "2021-08-08 23:35:04.961748"
-            },
-            "f86fc85dbebabd9989aab176393849aafa1a214072d3cfa12e195b97cc9acacc": {
-                "sender": "root",
-                "receiver": "cryptoCat",
-                "amount": "2",
-                "timestamp": "2021-08-08 23:40:38.395968"
-            },
-            "5eb5ea88794d1d592f75cbebd9a1c3ff01089cc870e5b239787fc852fbbb539a": {
-                "sender": "root",
-                "receiver": "cryptoCat",
-                "amount": "2",
-                "timestamp": "2021-08-13 22:24:30.736084"
+                "sender_public_key": "4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2",
+                "receiver": "neo",
+                "receiver_public_key": "b1cb5b3d929db848c3c5ea567e7808d1e6bc46590f5aedbcfab502ccc7729fb9",
+                "amount": "50",
+                "timestamp": "2022-05-20 01:09:06.394900"
             }
         },
         "previousNonce": "none",
         "nonce": "N0NCE",
-        "count": 5
-    },
-    "a369499c03a5556241f987e78584b96a3bfd6a51d8d675c722ac3c1b4e071ea1": {
-        "transactions": {
-            "f826bd6d0c3ee07328b33bc41982cea152c009622e667e405b65bb387cf2d689": {
-                "sender": "cryptoCat",
-                "receiver": "root",
-                "amount": "2",
-                "timestamp": "2022-05-01 23:42:51.265131"
-            },
-            "64e19655ae05c96faaa00f77aba87c2b0da1bf0d65ef4bbe0e273a281afed988": {
-                "sender": "cryptoCat",
-                "receiver": "jacobsLadder",
-                "amount": ".022222220999996",
-                "timestamp": "2022-05-08 21:03:16.438731"
-            },
-            "b2f4e31edfe21282b34fa86582790a31ff8f1a281790296aac2f48fb7039e758": {
-                "sender": "bongaDinga",
-                "receiver": "root",
-                "amount": "7",
-                "timestamp": "2022-05-13 15:23:19.117718"
-            },
-            "de5b9b7eba6966399d2a9558b1104f33786423bd30cf96ffcff6251d97f922c0": {
-                "sender": "root",
-                "receiver": "gizmo",
-                "amount": "6",
-                "timestamp": "2022-05-13 15:37:30.879543"
-            },
-            "19ea951415ace3b60eed8a9a4b9cf972996fad873f1c84715e66f574a6bd51e1": {
-                "sender": "root",
-                "receiver": "Mr.Tux",
-                "amount": "2",
-                "timestamp": "2022-05-19 23:53:44.057077"
-            }
-        },
-        "previousNonce": "N0NCE",
-        "nonce": "a369499c03a5556241f987e78584b96a3bfd6a51d8d675c722ac3c1b4e071ea1",
-        "count": 5
-    },
-    "afad32d391a420f955cbb8f67922feb4cb78ad90b4a83ebd00f155af0a5d80b9": {
-        "transactions": {
-            "73e3effb191abc0ab2cbbd5681bb87aecb9aa1f4439d77d79d282e4a68d59ff2": {
-                "sender": "jacobsLadder",
-                "receiver": "root",
-                "amount": "0.022222220999996",
-                "timestamp": "2022-05-19 23:55:37.494650"
-            },
-            "236ee1e9185c22c7c7bf2cc002a4dd3ed0eb6f4a9e7dc5997523aaa14787e78d": {
-                "sender": "root",
-                "receiver": "jacobsLadder",
-                "amount": "5.7",
-                "timestamp": "2022-05-20 00:42:08.775951"
-            }
-        },
-        "previousNonce": "a369499c03a5556241f987e78584b96a3bfd6a51d8d675c722ac3c1b4e071ea1",
-        "nonce": "afad32d391a420f955cbb8f67922feb4cb78ad90b4a83ebd00f155af0a5d80b9",
         "count": 2
     }
 }

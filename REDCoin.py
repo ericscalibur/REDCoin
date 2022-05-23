@@ -30,7 +30,7 @@ class Transaction:
 		self.sender = sender
 		self.sender_pk = sender_public_key
 		self.receiver = receiver
-		self.reciever = receiver_public_key
+		self.receiver_pk = receiver_public_key
 		self.amount = amount
 		self.timestamp = datetime.now()
 		self.ID = ""
@@ -208,7 +208,7 @@ def AddTransactionToCurrentBlock(nonce, tx):
 
 	if ComputeTransaction(tx):
 
-		redchain[nonce]['transactions'][tx.ID] = {"sender":tx.sender, "receiver":tx.receiver, "amount":tx.amount, "timestamp":tx.timestamp }
+		redchain[nonce]['transactions'][tx.ID] = {"sender":tx.sender, "sender_public_key":tx.sender_pk, "receiver":tx.receiver, "receiver_public_key":tx.receiver_pk, "amount":tx.amount, "timestamp":tx.timestamp }
 		redchain[nonce]['count'] = len(redchain[nonce]['transactions'])
 
 		with open("REDChain.json", "w") as h:

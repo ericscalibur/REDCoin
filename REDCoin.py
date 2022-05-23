@@ -204,17 +204,16 @@ def NewTransaction():
 
 def AddTransactionToCurrentBlock(nonce, tx):
 
-    with open("REDChain.json", "r") as f:
+    with open("REDChain.json", "r+") as f:
         redchain = json.load(f)
 
-    if ComputeTransaction(tx):
+        if ComputeTransaction(tx):
 
-        redchain[nonce]['transactions'][tx.ID] = {"sender":tx.sender, "sender_public_key":tx.sender_pk, "receiver":tx.receiver, "receiver_public_key":tx.receiver_pk, "amount":tx.amount, "timestamp":tx.timestamp }
-        redchain[nonce]['count'] = len(redchain[nonce]['transactions'])
+            redchain[nonce]['transactions'][tx.ID] = {"sender":tx.sender, "sender_public_key":tx.sender_pk, "receiver":tx.receiver, "receiver_public_key":tx.receiver_pk, "amount":tx.amount, "timestamp":tx.timestamp }
+            redchain[nonce]['count'] = len(redchain[nonce]['transactions'])
 
-    with open("REDChain.json", "w") as h:
-        h.seek(0)
-        json.dump(redchain, h, indent = 4)
+        f.seek(0)
+        json.dump(redchain, f, indent = 4)
 
 
 def AddBlockToChain(block):
@@ -222,10 +221,9 @@ def AddBlockToChain(block):
     with open("REDChain.json", "r") as f:
         redchain = json.load(f)
 
-    redchain[block.nonce] = { "transactions": {}, "previousNonce": block.previousNonce, "nonce": block.nonce , "count": block.count }
+        redchain[block.nonce] = { "transactions": {}, "previousNonce": block.previousNonce, "nonce": block.nonce , "count": block.count }
 
-    with open("REDChain.json", "w") as g:
-        json.dump(redchain, g, indent = 4)
+        json.dump(redchain, f, indent = 4)
 
 def ComputeTransaction(tx):
 
@@ -301,6 +299,8 @@ def ReviewUserTransactionHistory():
 
 # now, to clear the screen
 cls()
+
+#populate usersMaster from redchain
 
 print("Welcome to REDCoin! Choose from the following")
 while(play):

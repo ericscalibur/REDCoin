@@ -145,10 +145,10 @@ def ViewAllAccounts():
 
 def NewTransaction():
 
-    with open("UsersMaster.json", "r") as f:
+    with open("UsersMaster.json", "r+") as f:
         usersmaster = json.load(f)
 
-    with open("REDChain.json", "r") as g:
+    with open("REDChain.json", "r+") as g:
         redchain = json.load(g)
 
     recentNonce = list(redchain)[-1]
@@ -162,7 +162,12 @@ def NewTransaction():
             receiver = input("Enter Alias of Recipient: ")
             if receiver in usersmaster.keys():
                 amt = input("Enter the Amount: ")
-                if float(amt) > 0 and float(amt) <= usersmaster[sender]['REDCoin']:
+                # Get User Balances
+                senderBalance = usersmaster[sender]['REDCoin']
+                receiverBalance = usersmaster[receiver]['REDCoin']
+                # Check that the amount is available
+                if float(amt) > 0 and float(amt) <= senderBalance:
+
                     print("Processing..")
                     senderPublicKey = usersmaster[sender]['publickey']
                     receiverPublicKey = usersmaster[receiver]['publickey']
@@ -171,22 +176,40 @@ def NewTransaction():
                     hashable = str(newTX.timestamp) + sender+ senderPublicKey + pk + receiver + receiverPublicKey + amt
                     newTX.ID = hashlib.sha256(hashable.encode()).hexdigest()
                     time.sleep(5)
-                    print("Submiting transaction to REDChain..")
+                    print("Submiting Transaction to REDChain..")
+
                     if recentCount < 5:
 
-                        AddTransactionToCurrentBlock(recentNonce, newTX)
+                            # Add Transaction To Current Block
+                            redchain[recentNonce]['transactions'][newTX.ID] = {"sender":newTX.sender, "sender_public_key":newTX.sender_pk, "receiver":newTX.receiver, "receiver_public_key":newTX.receiver_pk, "amount":newTX.amount, "timestamp":newTX.timestamp }
+                            # Update Block Count
+                            redchain[recentNonce]['count'] = len(redchain[recentNonce]['transactions'])
 
                     elif recentCount == 5:
 
                         hashthis = ""
-
                         for tx in recentBlock['transactions']:
                             hashthis += tx
 
-                            newBlock = REDBlock(recentNonce)
-                            newBlock.nonce = hashlib.sha256(hashthis.encode()).hexdigest()
-                            AddBlockToChain(newBlock)
-                            AddTransactionToCurrentBlock(newBlock.nonce, newTX)
+                        newBlock = REDBlock(recentNonce)
+                        # Create a new block hash code
+                        newBlock.nonce = hashlib.sha256(hashthis.encode()).hexdigest()
+                        # Add Block To Chain
+                        redchain[newBlock.nonce] = { "transactions": {}, "previousNonce": newBlock.previousNonce, "nonce": newBlock.nonce , "count": newBlock.count }
+                        # Add Transaction To Current Block
+                        redchain[newBlock.nonce]['transactions'][newTX.ID] = {"sender":newTX.sender, "sender_public_key":newTX.sender_pk, "receiver":newTX.receiver, "receiver_public_key":newTX.receiver_pk, "amount":newTX.amount, "timestamp":newTX.timestamp }
+                        # Update Block Count
+                        redchain[newBlock.nonce]['count'] = len(redchain[newBlock.nonce]['transactions'])
+
+                    # Process Transaction
+                    usersmaster[newTX.receiver]['REDCoin'] = receiverBalance + float(newTX.amount)
+                    usersmaster[newTX.sender]['REDCoin'] = senderBalance - float(newTX.amount)
+
+                    # Write to files
+                    with open("UsersMaster.json", "w") as f:
+                        json.dump(usersmaster, f, indent = 4)
+                    with open("REDChain.json", "w") as g:
+                        json.dump(redchain, g, indent = 4)
 
                     time.sleep(3)
                     print("Transaction Confirmed!")
@@ -200,52 +223,6 @@ def NewTransaction():
             print("Incorrect Private Key..")
     else:
         print("Alias not found..")
-
-
-def AddTransactionToCurrentBlock(nonce, tx):
-
-    with open("REDChain.json", "r+") as f:
-        redchain = json.load(f)
-
-        if ComputeTransaction(tx):
-
-            redchain[nonce]['transactions'][tx.ID] = {"sender":tx.sender, "sender_public_key":tx.sender_pk, "receiver":tx.receiver, "receiver_public_key":tx.receiver_pk, "amount":tx.amount, "timestamp":tx.timestamp }
-            redchain[nonce]['count'] = len(redchain[nonce]['transactions'])
-
-        f.seek(0)
-        json.dump(redchain, f, indent = 4)
-
-
-def AddBlockToChain(block):
-
-    with open("REDChain.json", "r") as f:
-        redchain = json.load(f)
-
-        redchain[block.nonce] = { "transactions": {}, "previousNonce": block.previousNonce, "nonce": block.nonce , "count": block.count }
-
-        json.dump(redchain, f, indent = 4)
-
-def ComputeTransaction(tx):
-
-    with open("UsersMaster.json", "r") as f2:
-        usersmaster = json.load(f2)
-
-    senderBalance = usersmaster[tx.sender]['REDCoin']
-    receiverBalance = usersmaster[tx.receiver]['REDCoin']
-
-    if senderBalance >= float(tx.amount):
-
-        usersmaster[tx.receiver]['REDCoin'] = receiverBalance + float(tx.amount)
-        usersmaster[tx.sender]['REDCoin'] = senderBalance - float(tx.amount)
-
-        with open("UsersMaster.json", "w") as f3:
-            json.dump(usersmaster, f3, indent=4)
-
-        return True
-
-    else:
-        return False
-
 
 
 def ReviewTransaction():

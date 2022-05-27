@@ -121,7 +121,7 @@ def ViewPrivateKey():
 
 def NumberOfUsers():
 
-    f = open("UsersMaster.json")
+    f = open("UsersMaster.json", "r")
     usersmaster = json.load(f)
     f.close()
 
@@ -178,14 +178,14 @@ def NewTransaction():
                     time.sleep(5)
                     print("Submiting Transaction to REDChain..")
 
-                    if recentCount < 5:
+                    if recentCount < txpb:
 
                             # Add Transaction To Current Block
                             redchain[recentNonce]['transactions'][newTX.ID] = {"sender":newTX.sender, "sender_public_key":newTX.sender_pk, "receiver":newTX.receiver, "receiver_public_key":newTX.receiver_pk, "amount":newTX.amount, "timestamp":newTX.timestamp }
                             # Update Block Count
                             redchain[recentNonce]['count'] = len(redchain[recentNonce]['transactions'])
 
-                    elif recentCount == 5:
+                    elif recentCount == txpb:
 
                         hashthis = ""
                         for tx in recentBlock['transactions']:
@@ -206,7 +206,7 @@ def NewTransaction():
                     usersmaster[newTX.sender]['REDCoin'] = senderBalance - float(newTX.amount)
 
                     # Write to files
-                    with open("UsersMaster.json", "w") as f:
+                    with open("UsersMaster.json", "w") as f:        #do i need this open() ?
                         json.dump(usersmaster, f, indent = 4)
                     with open("REDChain.json", "w") as g:
                         json.dump(redchain, g, indent = 4)

@@ -157,23 +157,24 @@ def NewTransaction():
 
     sender = input("Enter your Alias: ")
     if sender in usersmaster.keys():
-        pk = input("Enter your Private Key: ")
-        if pk == usersmaster[sender]['privatekey']:
+        senderPrivateKey = input("Enter your Private Key: ")
+        if senderPrivateKey == usersmaster[sender]['privatekey']:
             receiver = input("Enter Alias of Recipient: ")
             if receiver in usersmaster.keys():
                 amt = input("Enter the Amount: ")
-                # Get User Balances
+                # Get User Data
                 senderBalance = usersmaster[sender]['REDCoin']
                 receiverBalance = usersmaster[receiver]['REDCoin']
+                senderPublicKey = usersmaster[sender]['publickey']
+                receiverPublicKey = usersmaster[receiver]['publickey']
                 # Check that the amount is available
                 if float(amt) > 0 and float(amt) <= senderBalance:
 
                     print("Processing..")
-                    senderPublicKey = usersmaster[sender]['publickey']
-                    receiverPublicKey = usersmaster[receiver]['publickey']
+
                     newTX = Transaction(sender, senderPublicKey, receiver, receiverPublicKey, amt)
                     newTX.timestamp = str(datetime.now())
-                    hashable = str(newTX.timestamp) + sender+ senderPublicKey + pk + receiver + receiverPublicKey + amt
+                    hashable = str(newTX.timestamp) + sender+ senderPublicKey + senderPrivateKey + receiver + receiverPublicKey + amt
                     newTX.ID = hashlib.sha256(hashable.encode()).hexdigest()
                     time.sleep(5)
                     print("Submiting Transaction to REDChain..")

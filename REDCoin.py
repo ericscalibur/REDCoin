@@ -268,15 +268,15 @@ def ReviewTransaction():
 
         txID = input("What is the Transaction ID? ")
 
-        for hashcode in redchain.keys():
+        for blockID in redchain.keys():
 
-            if txID in redchain[hashcode]['transactions'].keys():
+            if txID in redchain[blockID]['transactions'].keys():
 
-                sender = redchain[hashcode]['transactions'][txID]['sender']
-                receiver = redchain[hashcode]['transactions'][txID]['receiver']
-                amt = redchain[hashcode]['transactions'][txID]['amount']
-                time = redchain[hashcode]['transactions'][txID]['timestamp']
-                nonce = redchain[hashcode]['nonce']
+                sender = redchain[blockID]['transactions'][txID]['sender']
+                receiver = redchain[blockID]['transactions'][txID]['receiver']
+                amt = redchain[blockID]['transactions'][txID]['amount']
+                time = redchain[blockID]['transactions'][txID]['timestamp']
+                nonce = redchain[blockID]['nonce']
 
                 print('Sender: '+sender+"\t\tReceiver: "+receiver)
                 print('REDCoin: '+amt+"\t\tTime: "+time)
@@ -293,24 +293,79 @@ def ReviewUserTransactionHistory():
 
         resultCount = 0
 
-        for hashcode in redchain.keys():
+        for blockID in redchain.keys():
 
-            for txID in redchain[hashcode]['transactions']:
+            for txID in redchain[blockID]['transactions']:
 
-                if alias in redchain[hashcode]['transactions'][txID].values():
+                if alias in redchain[blockID]['transactions'][txID].values():
 
-                    s = redchain[hashcode]['transactions'][txID]['sender']
-                    r = redchain[hashcode]['transactions'][txID]['receiver']
-                    a = redchain[hashcode]['transactions'][txID]['amount']
-                    t = redchain[hashcode]['transactions'][txID]['timestamp']
+                    s = redchain[blockID]['transactions'][txID]['sender']
+                    r = redchain[blockID]['transactions'][txID]['receiver']
+                    a = redchain[blockID]['transactions'][txID]['amount']
+                    t = redchain[blockID]['transactions'][txID]['timestamp']
 
-                    print("Time: "+t+", Sender: "+s+", Receiver: "+r+", REDCoin: "+str(a)+", \nHashCode: "+hashcode+", txID: "+txID)
+                    print("Time: "+t+", Sender: "+s+", Receiver: "+r+", REDCoin: "+str(a)+", \nBlockID: "+blockID+", \ntxID: "+txID)
                     print(" ")
                     resultCount += 1
 
         if resultCount == 0:
 
-            print("Alias not found")
+            print("Alias not found.. ")
+
+def ViewBlock():
+
+    with open("REDChain.json", "r") as f:
+        redchain = json.load(f)
+
+        response = input("Look up using 1. BlockID or 2. HashCode? ")
+
+        if response == 'BlockID' or response == '1':
+
+            blockID = input("What is the BlockID? ")
+
+            if blockID in redchain.keys():
+
+                print("BlockID: "+blockID)
+                print("BlockInception: "+redchain[blockID]['blockInception'])
+                print("BlockSigned: "+redchain[blockID]['blockSigned'])
+                print("HashCode: "+redchain[blockID]['hashCode'])
+                print("Nonce: "+redchain[blockID]['nonce'])
+                print("Count: "+redchain[blockID]['count'])
+
+                for txID in redchain[blockID]['transactions']:
+
+                    s = redchain[blockID]['transactions'][txID]['sender']
+                    r = redchain[blockID]['transactions'][txID]['receiver']
+                    a = redchain[blockID]['transactions'][txID]['amount']
+                    t = redchain[blockID]['transactions'][txID]['timestamp']
+
+                    print("Time: "+t+", Sender: "+s+", Receiver: "+r+", REDCoin: "+str(a)+", \ntxID: "+txID)
+                    print(" ")
+
+        elif response == 'HashCode' or response == '2':
+
+            hashcode = input("What is the HashCode? ")
+
+            for blockID in redchain.keys():
+
+                if hashcode == redchain[blockID]['hashCode']:
+
+                    print("BlockID: "+blockID)
+                    print("BlockInception: "+redchain[blockID]['blockInception'])
+                    print("BlockSigned: "+redchain[blockID]['blockSigned'])
+                    print("HashCode: "+redchain[blockID]['hashCode'])
+                    print("Nonce: "+redchain[blockID]['nonce'])
+                    print("Count: "+str(redchain[blockID]['count']))
+
+                    for txID in redchain[blockID]['transactions']:
+
+                        s = redchain[blockID]['transactions'][txID]['sender']
+                        r = redchain[blockID]['transactions'][txID]['receiver']
+                        a = redchain[blockID]['transactions'][txID]['amount']
+                        t = redchain[blockID]['transactions'][txID]['timestamp']
+
+                        print("Time: "+t+", Sender: "+s+", Receiver: "+r+", REDCoin: "+str(a)+", \ntxID: "+txID)
+                        print(" ")
 
 # now, to clear the screen
 cls()
@@ -376,3 +431,8 @@ while(play):
         play = False
         cls()
         print("Goodbye..")
+
+    elif selection == "ViewBlock":
+
+        cls()
+        ViewBlock()

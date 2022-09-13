@@ -18,11 +18,14 @@ def cls():
 
 class REDBlock:
 
-    def __init__(self, previousNonce):
+    def __init__(self, previousHash):
         self.transactions = {}
-        self.previousNonce = previousNonce
-        self.nonce = ""
+        self.hashCode = ""
+        self.previousHash = previousHash
+        self.nonce = '0'
         self.count = len(self.transactions)
+        self.blockInception = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+        self.blockSigned = ""
 
 class Transaction:
 
@@ -32,17 +35,17 @@ class Transaction:
         self.receiver = receiver
         self.receiver_pk = receiver_public_key
         self.amount = amount
-        self.timestamp = datetime.now()
+        self.timestamp = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
         self.ID = ""
 
 class User:
 
     def __init__(self, alias):
         self.alias = alias
-        self.timestamp = datetime.now()
-        public_data = alias + self.timestamp.strftime("%m/%d/%Y, %H:%M:%S")
+        self.timestamp = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+        public_data = alias + self.timestamp
         self.publickey = hashlib.sha256(public_data.encode()).hexdigest()
-        private_data = self.timestamp.strftime("%m/%d/%Y, %H:%M:%S") + alias + self.publickey
+        private_data = self.timestamp + alias + self.publickey
         self.privatekey = hashlib.sha256(private_data.encode()).hexdigest()
         self.REDCoin = 0.0
 
@@ -145,14 +148,14 @@ def ViewAllAccounts():
 
 def NewTransaction():
 
-    with open("UsersMaster.json", "r+") as f:
-        usersmaster = json.load(f)
+    f = open("UsersMaster.json", "r+")
+    usersmaster = json.load(f)
 
-    with open("REDChain.json", "r+") as g:
-        redchain = json.load(g)
+    g = open("REDChain.json", "r+")
+    redchain = json.load(g)
 
-    recentNonce = list(redchain)[-1]
-    recentBlock = redchain[recentNonce]
+    recentBlockID = list(redchain)[-1]    ##maybe this
+    recentBlock = redchain[recentBlockID]
     recentCount = recentBlock['count']
 
     sender = input("Enter your Alias: ")
@@ -173,44 +176,76 @@ def NewTransaction():
                     print("Processing..")
 
                     newTX = Transaction(sender, senderPublicKey, receiver, receiverPublicKey, amt)
-                    newTX.timestamp = str(datetime.now())
+                    newTX.timestamp = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
                     hashable = str(newTX.timestamp) + sender+ senderPublicKey + senderPrivateKey + receiver + receiverPublicKey + amt
                     newTX.ID = hashlib.sha256(hashable.encode()).hexdigest()
                     time.sleep(5)
-                    print("Submiting Transaction to REDChain..")
 
                     if recentCount < txpb:
 
                             # Add Transaction To Current Block
-                            redchain[recentNonce]['transactions'][newTX.ID] = {"sender":newTX.sender, "sender_public_key":newTX.sender_pk, "receiver":newTX.receiver, "receiver_public_key":newTX.receiver_pk, "amount":newTX.amount, "timestamp":newTX.timestamp }
+                            redchain[recentBlockID]['transactions'][newTX.ID] = {"sender":newTX.sender, "sender_public_key":newTX.sender_pk, "receiver":newTX.receiver, "receiver_public_key":newTX.receiver_pk, "amount":newTX.amount, "timestamp":newTX.timestamp }
                             # Update Block Count
-                            redchain[recentNonce]['count'] = len(redchain[recentNonce]['transactions'])
+                            redchain[recentBlockID]['count'] = len(redchain[recentBlockID]['transactions'])
 
                     elif recentCount == txpb:
 
                         hashthis = ""
+                        nonce = int(recentBlock['nonce'])
+
+                        # create a string containing all the tx data
                         for tx in recentBlock['transactions']:
                             hashthis += tx
 
-                        newBlock = REDBlock(recentNonce)
-                        # Create a new block hash code
-                        newBlock.nonce = hashlib.sha256(hashthis.encode()).hexdigest()
-                        # Add Block To Chain
-                        redchain[newBlock.nonce] = { "transactions": {}, "previousNonce": newBlock.previousNonce, "nonce": newBlock.nonce , "count": newBlock.count }
-                        # Add Transaction To Current Block
-                        redchain[newBlock.nonce]['transactions'][newTX.ID] = {"sender":newTX.sender, "sender_public_key":newTX.sender_pk, "receiver":newTX.receiver, "receiver_public_key":newTX.receiver_pk, "amount":newTX.amount, "timestamp":newTX.timestamp }
-                        # Update Block Count
-                        redchain[newBlock.nonce]['count'] = len(redchain[newBlock.nonce]['transactions'])
+                        # concatenate nonce to data string
+                        hash_this = hashthis + str(nonce)
+                        # Find a nonce and sign block with hashcode
+                        signHash = hashlib.sha256(hash_this.encode()).hexdigest()
+                        print("Finding a nonce and signHash...")
+
+                        while(signHash[0] != '0'):
+                            nonce = nonce + 1
+                            hashthis_ = hashthis + str(nonce)
+                            signHash = hashlib.sha256(hashthis_.encode()).hexdigest()
+                            continue
+
+                        # Sign recent block
+                        recentBlock['hashCode'] = signHash
+                        recentBlock['nonce'] = str(nonce)
+                        recentBlock['blockSigned'] = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+                        print("Block Signed! HashCode: "+signHash)
+
+                        # Create a new block with old hash code
+                        newBlock = REDBlock(signHash)
+
+                        # Create a BlockID for the new block
+                        shashasha = newBlock.blockInception + newBlock.previousHash
+                        newBlockID = hashlib.sha256(shashasha.encode()).hexdigest()
+
+                        # Add Transaction Data to Block and Add Block to Chain
+                        redchain[newBlockID] = { "transactions": {
+                            newTX.ID : {
+                                "sender":newTX.sender,
+                                "sender_public_key":newTX.sender_pk,
+                                "receiver":newTX.receiver,
+                                "receiver_public_key":newTX.receiver_pk,
+                                "amount":newTX.amount,
+                                "timestamp":newTX.timestamp
+                            }, }, "blockInception": newBlock.blockInception, "blockSigned": "not signed yet",
+                            "hashCode": "not signed", "previousHash": newBlock.previousHash, "nonce": "0", "count": 1 }
 
                     # Process Transaction
                     usersmaster[newTX.receiver]['REDCoin'] = receiverBalance + float(newTX.amount)
                     usersmaster[newTX.sender]['REDCoin'] = senderBalance - float(newTX.amount)
 
                     # Write to files
-                    with open("UsersMaster.json", "w") as f:        #do i need this open() ?
-                        json.dump(usersmaster, f, indent = 4)
-                    with open("REDChain.json", "w") as g:
-                        json.dump(redchain, g, indent = 4)
+                    f.seek(0)
+                    json.dump(usersmaster, f, indent = 4)
+                    f.close()
+
+                    g.seek(0)
+                    json.dump(redchain, g, indent = 4)
+                    g.close()
 
                     time.sleep(3)
                     print("Transaction Confirmed!")
@@ -233,18 +268,20 @@ def ReviewTransaction():
 
         txID = input("What is the Transaction ID? ")
 
-        for nonce in redchain.keys():
+        for hashcode in redchain.keys():
 
-            if txID in redchain[nonce]['transactions'].keys():
+            if txID in redchain[hashcode]['transactions'].keys():
 
-                sender = redchain[nonce]['transactions'][txID]['sender']
-                receiver = redchain[nonce]['transactions'][txID]['receiver']
-                amt = redchain[nonce]['transactions'][txID]['amount']
-                time = redchain[nonce]['transactions'][txID]['timestamp']
+                sender = redchain[hashcode]['transactions'][txID]['sender']
+                receiver = redchain[hashcode]['transactions'][txID]['receiver']
+                amt = redchain[hashcode]['transactions'][txID]['amount']
+                time = redchain[hashcode]['transactions'][txID]['timestamp']
+                nonce = redchain[hashcode]['nonce']
 
-                print('Sender: '+sender+"\t\tReciever: "+receiver)
+                print('Sender: '+sender+"\t\tReceiver: "+receiver)
                 print('REDCoin: '+amt+"\t\tTime: "+time)
-                print("Block Nonce: "+nonce)
+                print("HashCode: "+hashcode)
+                print('Nonce: '+nonce);
                 print("Transaction ID: "+txID)
 
 def ReviewUserTransactionHistory():
@@ -256,18 +293,18 @@ def ReviewUserTransactionHistory():
 
         resultCount = 0
 
-        for nonce in redchain.keys():
+        for hashcode in redchain.keys():
 
-            for txID in redchain[nonce]['transactions']:
+            for txID in redchain[hashcode]['transactions']:
 
-                if alias in redchain[nonce]['transactions'][txID].values():
+                if alias in redchain[hashcode]['transactions'][txID].values():
 
-                    s = redchain[nonce]['transactions'][txID]['sender']
-                    r = redchain[nonce]['transactions'][txID]['receiver']
-                    a = redchain[nonce]['transactions'][txID]['amount']
-                    t = redchain[nonce]['transactions'][txID]['timestamp']
+                    s = redchain[hashcode]['transactions'][txID]['sender']
+                    r = redchain[hashcode]['transactions'][txID]['receiver']
+                    a = redchain[hashcode]['transactions'][txID]['amount']
+                    t = redchain[hashcode]['transactions'][txID]['timestamp']
 
-                    print("Time: "+t+", Sender: "+s+", Receiver: "+r+", REDCoin: "+str(a)+", \nNonce: "+nonce+", txID: "+txID)
+                    print("Time: "+t+", Sender: "+s+", Receiver: "+r+", REDCoin: "+str(a)+", \nHashCode: "+hashcode+", txID: "+txID)
                     print(" ")
                     resultCount += 1
 

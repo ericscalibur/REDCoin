@@ -179,21 +179,23 @@ def NewTransaction():
                     newTX.timestamp = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
                     hashable = str(newTX.timestamp) + sender+ senderPublicKey + senderPrivateKey + receiver + receiverPublicKey + amt
                     newTX.ID = hashlib.sha256(hashable.encode()).hexdigest()
-                    time.sleep(5)
+                    # time.sleep(5)
 
                     if recentCount < txpb:
 
+                            print("Adding transaction to current block..")
                             # Add Transaction To Current Block
                             redchain[recentBlockID]['transactions'][newTX.ID] = {"sender":newTX.sender, "sender_public_key":newTX.sender_pk, "receiver":newTX.receiver, "receiver_public_key":newTX.receiver_pk, "amount":newTX.amount, "timestamp":newTX.timestamp }
                             # Update Block Count
                             redchain[recentBlockID]['count'] = len(redchain[recentBlockID]['transactions'])
+                            print("Block Count: "+str(redchain[recentBlockID]['count']))
 
                     elif recentCount == txpb:
 
                         hashthis = ""
                         nonce = int(recentBlock['nonce'])
-
-                        # create a string containing all the tx data
+                        print("Concatenating transaction ids..")
+                        # create a string containing all the tx id's
                         for tx in recentBlock['transactions']:
                             hashthis += tx
 
@@ -213,7 +215,9 @@ def NewTransaction():
                         recentBlock['hashCode'] = signHash
                         recentBlock['nonce'] = str(nonce)
                         recentBlock['blockSigned'] = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-                        print("Block Signed! HashCode: "+signHash)
+                        print("Block Signed!")
+                        print("HashCode: "+signHash)
+                        print("Nonce: "+str(nonce))
 
                         # Create a new block with old hash code
                         newBlock = REDBlock(signHash)
@@ -268,21 +272,39 @@ def ReviewTransaction():
 
         txID = input("What is the Transaction ID? ")
 
+        #counts how many blocks have been searched
+        counter = 0
+
         for blockID in redchain.keys():
+
+            counter = counter + 1
 
             if txID in redchain[blockID]['transactions'].keys():
 
-                sender = redchain[blockID]['transactions'][txID]['sender']
-                receiver = redchain[blockID]['transactions'][txID]['receiver']
-                amt = redchain[blockID]['transactions'][txID]['amount']
-                time = redchain[blockID]['transactions'][txID]['timestamp']
-                nonce = redchain[blockID]['nonce']
+                if redchain[blockID]['hashCode'] != "not signed":
 
-                print('Sender: '+sender+"\t\tReceiver: "+receiver)
-                print('REDCoin: '+amt+"\t\tTime: "+time)
-                print("HashCode: "+hashcode)
-                print('Nonce: '+nonce);
-                print("Transaction ID: "+txID)
+                    sender = redchain[blockID]['transactions'][txID]['sender']
+                    receiver = redchain[blockID]['transactions'][txID]['receiver']
+                    amt = redchain[blockID]['transactions'][txID]['amount']
+                    time = redchain[blockID]['transactions'][txID]['timestamp']
+                    hashcode = redchain[blockID]['hashCode']
+                    nonce = redchain[blockID]['nonce']
+
+                    print('Sender: '+sender+"\t\tReceiver: "+receiver)
+                    print('REDCoin: '+amt+"\t\tTime: "+time)
+                    print("HashCode: "+hashcode)
+                    print('Nonce: '+nonce);
+                    print("Transaction ID: "+txID)
+                    return
+
+                else:
+                    print("The block for this transaction has not yet been signed..")
+                    return
+
+        # if all the blocks have been searched and txid not found..
+        if counter >= len(redchain):
+
+            print("Transaction ID not found..")
 
 def ReviewUserTransactionHistory():
 

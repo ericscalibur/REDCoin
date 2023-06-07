@@ -193,8 +193,9 @@ def NewTransaction():
                     elif recentCount == txpb:
 
                         nonce = int(recentBlock['nonce'])
-                        previousHash = recentBlock['previousHash']
-                        hashthis = "" + previousHash
+                        prevHash = recentBlock['previousHash']
+                        blockIncept = recentBlock['blockInception']
+                        hashthis = blockIncept + prevHash
 
                         print("Concatenating transaction ids..")
                         # create a string containing all the tx id's

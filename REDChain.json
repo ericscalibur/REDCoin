@@ -308,12 +308,62 @@
                 "receiver_public_key": "4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2",
                 "amount": ".04",
                 "timestamp": "03/20/2023, 23:26:22"
+            },
+            "fbcfcf0c20b3174059abd1cc1b768dd96e1334c505a6da816f2624713810e596": {
+                "sender": "root",
+                "sender_public_key": "4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2",
+                "receiver": "mrtux",
+                "receiver_public_key": "06a6384e630a4d20fe2f6fa621b10cdfe9efde17dcee3eb3e8553eb10f96d287",
+                "amount": "2",
+                "timestamp": "06/07/2023, 15:00:57"
+            },
+            "229181a08bffc52f2608975e251072122ba83b460a19c23098c0f65ba4c7dad8": {
+                "sender": "root",
+                "sender_public_key": "4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2",
+                "receiver": "mrtux",
+                "receiver_public_key": "06a6384e630a4d20fe2f6fa621b10cdfe9efde17dcee3eb3e8553eb10f96d287",
+                "amount": "2",
+                "timestamp": "06/07/2023, 15:01:21"
+            },
+            "a91689e90392c6f269f5f07f8fb35de82e01d06051be0712af16515b2add703c": {
+                "sender": "root",
+                "sender_public_key": "4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2",
+                "receiver": "mrtux",
+                "receiver_public_key": "06a6384e630a4d20fe2f6fa621b10cdfe9efde17dcee3eb3e8553eb10f96d287",
+                "amount": ".05",
+                "timestamp": "06/07/2023, 15:01:37"
+            },
+            "263bca6dac0f9d6e4bf041af67543e0d9e461fbbdf050d828441994f317cd92b": {
+                "sender": "root",
+                "sender_public_key": "4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2",
+                "receiver": "mrtux",
+                "receiver_public_key": "06a6384e630a4d20fe2f6fa621b10cdfe9efde17dcee3eb3e8553eb10f96d287",
+                "amount": ".25",
+                "timestamp": "06/07/2023, 15:01:57"
             }
         },
         "blockInception": "03/20/2023, 23:26:22",
+        "blockSigned": "06/07/2023, 15:02:14",
+        "hashCode": "0bba9b8a1a633675e3dc2bb49de8d43376e612677d1eb3eaec93ea68753cf726",
+        "previousHash": "0d0ef02d7823ffc40f54cbb90bdf7b442dd2a308ffb18c53c08947d4b4929468",
+        "nonce": "26",
+        "count": 5
+    },
+    "4a9381ead9d5fb85944aaabea850ffb028310cfc3982cc7cc1a89ab00772e244": {
+        "transactions": {
+            "bb1e1395c612b48c7a7ea4f09e4ac21adf2a4cfb7be4eb2c5b3188dc4de2247f": {
+                "sender": "root",
+                "sender_public_key": "4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2",
+                "receiver": "mrtux",
+                "receiver_public_key": "06a6384e630a4d20fe2f6fa621b10cdfe9efde17dcee3eb3e8553eb10f96d287",
+                "amount": ".1",
+                "timestamp": "06/07/2023, 15:02:14"
+            }
+        },
+        "blockInception": "06/07/2023, 15:02:14",
         "blockSigned": "not signed yet",
         "hashCode": "not signed",
-        "previousHash": "0d0ef02d7823ffc40f54cbb90bdf7b442dd2a308ffb18c53c08947d4b4929468",
+        "previousHash": "0bba9b8a1a633675e3dc2bb49de8d43376e612677d1eb3eaec93ea68753cf726",
         "nonce": "0",
         "count": 1
     }

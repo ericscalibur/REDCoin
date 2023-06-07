@@ -192,8 +192,10 @@ def NewTransaction():
 
                     elif recentCount == txpb:
 
-                        hashthis = ""
                         nonce = int(recentBlock['nonce'])
+                        previousHash = recentBlock['previousHash']
+                        hashthis = "" + previousHash
+
                         print("Concatenating transaction ids..")
                         # create a string containing all the tx id's
                         for tx in recentBlock['transactions']:
